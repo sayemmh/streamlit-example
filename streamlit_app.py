@@ -18,17 +18,19 @@ load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')  
 
 st.set_page_config(
-    page_title="PolicyNavigator",
+    page_title="Policy Navigator",
     page_icon="️⚕️",
     # layout="wide",
     # initial_sidebar_state="expanded",
     menu_items={
-        'Get Help': 'https://www.extremelycoolapp.com/help',
-        'Report a bug': "https://www.extremelycoolapp.com/bug",
-        'About': "# This is a header. This is an *extremely* cool app!"
+        'Get help': 'https://www.linkedin.com/in/sayemhoque7/',
+        'About': "Help navigate insurance decisions"
     }
 )
 
+
+def get_report():
+    return "What company is issuing this plan? What is the deductible? What does that dollar amount mean? What type of plan is this (HMO, PPO, HDHP)? What does that plan stand for? Answer succinctly."
 
 # vectors = getDocEmbeds("gpt4.pdf")
 # qa = ChatVectorDBChain.from_llm(ChatOpenAI(model_name="gpt-3.5-turbo"), vectors, return_source_documents=True)
@@ -80,7 +82,7 @@ async def main():
     #Creating the chatbot interface
     st.title("Navigate My Insurance Policy")
 
-    multi = ''' When choosing an insurance policy, insurers should give you access to a Summary of Benefits and Coverage and other documents that describe the nuances of a health insurance plan. Even after choosing a plan, unless you're an industry expert, it can be tough to understand what everything means.
+    multi = ''' When choosing an insurance policy, insurers should give you access to a Summary of Benefits and Coverage and other documents that describe the nuances of a health insurance plan. Even after choosing a plan, it can be tough to understand what everything means.
     '''
     st.markdown(multi)
 
@@ -100,6 +102,12 @@ async def main():
             vectors = await getDocEmbeds(io.BytesIO(file), uploaded_file.name)
             qa = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-3.5-turbo"), retriever=vectors.as_retriever(), return_source_documents=True)
 
+            output = await conversational_chat(get_report())
+
+        print(output)
+        output = output.replace("$", "\$")
+        st.markdown(output)
+
         st.session_state['ready'] = True
 
     st.divider()
@@ -107,7 +115,7 @@ async def main():
     if st.session_state['ready']:
 
         if 'generated' not in st.session_state:
-            st.session_state['generated'] = ["Welcome! You can now ask any questions regarding " + uploaded_file.name]
+            st.session_state['generated'] = ["You can ask additional questions regarding your health policy"]
 
         if 'past' not in st.session_state:
             st.session_state['past'] = ["Hey!"]
@@ -118,26 +126,26 @@ async def main():
         # container for text box
         container = st.container()
 
-
-
-
-
         with container:
-            # with st.form(key='my_form', clear_on_submit=True):
-                # user_input = st.text_input("Query:", placeholder="e.g: Summarize the paper in a few sentences", key='input')
-                # submit_button = st.form_submit_button(label='Send')
-        
-            user_input = st.chat_input("Ask me something about your benefits")
+
+            col1, col2, col3 = st.columns(3)
+            for j in range(0,1):
+                with col3:
+                    if st.button("What does that mean"):
+                        print("fdhksjfsdhjk")
+                    if st.button("What does that mean 2"):
+                        pass
+                    if st.button("What is the point of that?"):
+                        pass
+       
+       
+            # st.button("What does that mean")
+
+            user_input = st.chat_input("Ask me something else about your benefits")
+
             if user_input:
-                    st.write(f"User has sent the following user_input: {user_input}")
-
-
-
-
-
-            # if submit_button and user_input:
-            if user_input:
-                output = await conversational_chat(user_input)
+                modified = user_input + ". Answer succinctly and easy to understand."
+                output = await conversational_chat(modified)
                 st.session_state['past'].append(user_input)
                 st.session_state['generated'].append(output)
 
@@ -146,6 +154,13 @@ async def main():
                 for i in range(len(st.session_state['generated'])):
                     message(st.session_state["past"][i], is_user=True, key=str(i) + '_user', avatar_style="thumbs")
                     message(st.session_state["generated"][i], key=str(i), avatar_style="bottts")
+
+container2 = st.container()
+
+with container2:
+    st.write("Stay in touch as more features are released. We will never spam you.")
+    if st.text_input('Email Address'):
+        st.write("Thank you!")
 
 
 if __name__ == "__main__":
