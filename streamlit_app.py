@@ -17,6 +17,18 @@ import asyncio
 load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')  
 
+st.set_page_config(
+    page_title="PolicyNerd",
+    page_icon="️⚕️",
+    # layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+        'About': "# This is a header. This is an *extremely* cool app!"
+    }
+)
+
 # vectors = getDocEmbeds("gpt4.pdf")
 # qa = ChatVectorDBChain.from_llm(ChatOpenAI(model_name="gpt-3.5-turbo"), vectors, return_source_documents=True)
 
@@ -65,7 +77,9 @@ async def main():
 
 
     #Creating the chatbot interface
-    st.title("Help me understand my insurance options")
+    st.title("Help navigate my insurance")
+
+    st.text("It's tough to understand")
 
     if 'ready' not in st.session_state:
         st.session_state['ready'] = False
@@ -100,12 +114,25 @@ async def main():
         # container for text box
         container = st.container()
 
-        with container:
-            with st.form(key='my_form', clear_on_submit=True):
-                user_input = st.text_input("Query:", placeholder="e.g: Summarize the paper in a few sentences", key='input')
-                submit_button = st.form_submit_button(label='Send')
 
-            if submit_button and user_input:
+
+
+
+        with container:
+            # with st.form(key='my_form', clear_on_submit=True):
+                # user_input = st.text_input("Query:", placeholder="e.g: Summarize the paper in a few sentences", key='input')
+                # submit_button = st.form_submit_button(label='Send')
+        
+            user_input = st.chat_input("Ask me something about your benefits")
+            if user_input:
+                    st.write(f"User has sent the following user_input: {user_input}")
+
+
+
+
+
+            # if submit_button and user_input:
+            if user_input:
                 output = await conversational_chat(user_input)
                 st.session_state['past'].append(user_input)
                 st.session_state['generated'].append(output)
@@ -114,7 +141,7 @@ async def main():
             with response_container:
                 for i in range(len(st.session_state['generated'])):
                     message(st.session_state["past"][i], is_user=True, key=str(i) + '_user', avatar_style="thumbs")
-                    message(st.session_state["generated"][i], key=str(i), avatar_style="fun-emoji")
+                    message(st.session_state["generated"][i], key=str(i), avatar_style="bottts")
 
 
 if __name__ == "__main__":
