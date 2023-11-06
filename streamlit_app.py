@@ -70,7 +70,7 @@ async def main():
     if 'ready' not in st.session_state:
         st.session_state['ready'] = False
 
-    uploaded_file = st.file_uploader("Choose a file", type="pdf")
+    uploaded_file = st.file_uploader("Upload benefits PDFs here", type="pdf")
 
     if uploaded_file is not None:
 
