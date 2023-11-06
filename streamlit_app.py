@@ -18,16 +18,17 @@ load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')  
 
 st.set_page_config(
-    page_title="PolicyNerd",
+    page_title="PolicyNavigator",
     page_icon="️⚕️",
     # layout="wide",
-    initial_sidebar_state="expanded",
+    # initial_sidebar_state="expanded",
     menu_items={
         'Get Help': 'https://www.extremelycoolapp.com/help',
         'Report a bug': "https://www.extremelycoolapp.com/bug",
         'About': "# This is a header. This is an *extremely* cool app!"
     }
 )
+
 
 # vectors = getDocEmbeds("gpt4.pdf")
 # qa = ChatVectorDBChain.from_llm(ChatOpenAI(model_name="gpt-3.5-turbo"), vectors, return_source_documents=True)
@@ -77,9 +78,12 @@ async def main():
 
 
     #Creating the chatbot interface
-    st.title("Help navigate my insurance")
+    st.title("Navigate My Insurance Policy")
 
-    st.text("It's tough to understand")
+    multi = ''' When choosing an insurance policy, insurers should give you access to a Summary of Benefits and Coverage and other documents that describe the nuances of a health insurance plan. Even after choosing a plan, unless you're an industry expert, it can be tough to understand what everything means.
+    '''
+    st.markdown(multi)
+
 
     if 'ready' not in st.session_state:
         st.session_state['ready'] = False
