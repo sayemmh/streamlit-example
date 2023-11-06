@@ -106,6 +106,7 @@ async def main():
 
         print(output)
         output = output.replace("$", "\$")
+        st.markdown("## A short explanation of this plan")
         st.markdown(output)
 
         st.session_state['ready'] = True
