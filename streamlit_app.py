@@ -30,7 +30,31 @@ st.set_page_config(
 
 
 def get_report():
-    return "What company is issuing this plan? What is the deductible? What does that dollar amount mean? What type of plan is this (HMO, PPO, HDHP)? What does that plan stand for? Answer succinctly."
+    return '''Who is issuing this plan? If you cannot find it, do not include it in the answer.
+
+    What is the deductible?
+    
+    Given the deductible amount, how many dollars will an individual pay from your wallet in this plan before the insurance pays? 
+    
+    What type of plan is this (HMO, PPO, HDHP)? What does that plan stand for?
+
+    What kind of person is that type of plan generally best for?
+    
+    What does this plan mention about preventative care services?
+
+    Does this plan use a provider network? Where can I find which providers are in network?
+
+    What happens if I use a provider outside of the network?
+
+    If I visit a doctor in network, how much will I pay? For example, if there's a coinsurance, how much will I owe if the doctor charges $450 for the visit?
+
+
+    Answer all of these succinctly.
+    
+    
+    
+    '''
+
 
 # vectors = getDocEmbeds("gpt4.pdf")
 # qa = ChatVectorDBChain.from_llm(ChatOpenAI(model_name="gpt-3.5-turbo"), vectors, return_source_documents=True)
@@ -80,17 +104,22 @@ async def main():
 
 
     #Creating the chatbot interface
-    st.title("Navigate My Insurance Policy")
+    st.title("Policy Navigator")
 
-    multi = ''' When choosing an insurance policy, insurers should give you access to a Summary of Benefits and Coverage and other documents that describe the nuances of a health insurance plan. Even after choosing a plan, it can be tough to understand what everything means.
+    multi = ''' When choosing an insurance policy, insurers should give you access to a Summary of Benefits and Coverage that describe the nuances of a health insurance plan. During open enrollment or even after choosing a plan, it can be tough to understand what everything means in your plan.
     '''
     st.markdown(multi)
+
+    multi2 = ''' We've aggregated data from a large corpus of benefits documents and trusted sources of data such as healthcare.gov to try to surface this data in a human-understandable format. You can upload a document below and ask questions about it using our data below.
+    '''
+    st.markdown(multi2)
+
 
 
     if 'ready' not in st.session_state:
         st.session_state['ready'] = False
 
-    uploaded_file = st.file_uploader("Upload benefits PDFs here", type="pdf")
+    uploaded_file = st.file_uploader("", type="pdf")
 
     if uploaded_file is not None:
 
@@ -106,7 +135,7 @@ async def main():
 
         print(output)
         output = output.replace("$", "\$")
-        st.markdown("## A short explanation of this plan")
+        st.markdown("### A short explanation of this plan")
         st.markdown(output)
 
         st.session_state['ready'] = True
