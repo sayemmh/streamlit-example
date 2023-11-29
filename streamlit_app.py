@@ -36,7 +36,7 @@ def get_report():
     
     Given the deductible amount, how many dollars will an individual pay from your wallet in this plan before the insurance pays? 
     
-    What type of plan is this (HMO, PPO, HDHP)? What does that plan stand for?
+    What plan type is this (HMO, PPO, HDHP)? What does that plan stand for?
 
     What kind of person is that type of plan generally best for?
     
@@ -49,9 +49,7 @@ def get_report():
     If I visit a doctor in network, how much will I pay? For example, if there's a coinsurance, how much will I owe if the doctor charges $450 for the visit?
 
 
-    Answer all of these succinctly.
-    
-    
+    Answer all of these succinctly, in bullet form.
     
     '''
 
@@ -106,11 +104,11 @@ async def main():
     #Creating the chatbot interface
     st.title("Policy Navigator")
 
-    multi = ''' When choosing an insurance policy, insurers should give you access to a Summary of Benefits and Coverage that describe the nuances of a health insurance plan. During open enrollment or even after choosing a plan, it can be tough to understand what everything means in your plan.
+    multi = ''' When choosing an insurance policy, insurers should give you access to a Summary of Benefits and Coverage document that describes the nuances of a health insurance plan. During open enrollment or even after choosing a plan, it can be tough to understand what everything means.
     '''
     st.markdown(multi)
 
-    multi2 = ''' We've aggregated data from a large corpus of benefits documents and trusted sources of data such as healthcare.gov to try to surface this data in a human-understandable format. You can upload a document below and ask questions about it using our data below.
+    multi2 = ''' We've aggregated data from a large corpus of benefits documents and trusted sources of healthcare knowledge such as healthcare.gov to try to surface this in a human-understandable format. You can upload a document and ask questions about it using our data below.
     '''
     st.markdown(multi2)
 
@@ -148,7 +146,7 @@ async def main():
             st.session_state['generated'] = ["You can ask additional questions regarding your health policy"]
 
         if 'past' not in st.session_state:
-            st.session_state['past'] = ["Hey!"]
+            st.session_state['past'] = [""]
 
         # container for chat history
         response_container = st.container()
@@ -161,11 +159,11 @@ async def main():
             col1, col2, col3 = st.columns(3)
             for j in range(0,1):
                 with col3:
-                    if st.button("What does that mean"):
+                    if st.button("What does this mean for my plan?"):
                         print("fdhksjfsdhjk")
-                    if st.button("What does that mean 2"):
+                    if st.button("Does my plan cover preventative treatment?"):
                         pass
-                    if st.button("What is the point of that?"):
+                    if st.button("What is my deductible?"):
                         pass
        
        
